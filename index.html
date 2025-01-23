@@ -1,8 +1,1214 @@
-<html>
-<title>这是一个测试页面</title >
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 图片生成工具</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* 页面整体布局 */
+        body {
+            background-color: #0a0b0e;
+            color: #e1e1e6;
+            min-height: 100vh;
+        }
+
+        /* 内容区域布局 */
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 各个部分的间距 */
+        .section-spacing {
+            margin-top: 6rem;
+            margin-bottom: 6rem;
+        }
+
+        /* 价格模块样式优化 */
+        .pricing-section {
+            background: rgba(16, 18, 27, 0.7);
+            padding: 4rem 0;
+            margin-top: 6rem;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* FAQ部分样式优化 */
+        .faq-section {
+            max-width: 900px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background: rgba(16, 18, 27, 0.95);
+            padding: 4rem 0;
+            margin-top: 6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        /* 响应式布局调整 */
+        @media (max-width: 1200px) {
+            .page-container {
+                padding: 0 1rem;
+            }
+            
+            .section-spacing {
+                margin-top: 4rem;
+                margin-bottom: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-spacing {
+                margin-top: 3rem;
+                margin-bottom: 3rem;
+            }
+        }
+
+        /* 页面过渡动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 分隔线样式 */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(52, 152, 219, 0.3), transparent);
+            margin: 4rem 0;
+        }
+
+        /* 标题统一样式 */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 全局样式重置 */
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #0a0b0e;
+            color: #e1e1e6;
+        }
+
+        /* 导航栏暗色主题 */
+        nav {
+            background: rgba(16, 18, 27, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            animation: navFadeIn 0.5s ease-out;
+        }
+
+        /* 导航栏容器样式 */
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            position: relative;  /* 添加相对定位 */
+        }
+
+        /* Logo样式调整 */
+        .nav-logo {
+            margin-right: auto;  /* 让Logo靠左 */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4em;
+            font-weight: 600;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+            letter-spacing: 1px;
+        }
+
+        /* 中间导航链接样式优化 */
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2.5rem;  /* 增加间距 */
+        }
+
+        .nav-link {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #a0a0a0;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            letter-spacing: 1px;
+            text-transform: uppercase;  /* 文字大写 */
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            text-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;  /* 调整下划线位置 */
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* 活跃状态样式 */
+        .nav-link.active {
+            color: #fff;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+        }
+
+        /* 添加hover时的微妙缩放效果 */
+        .nav-link {
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            transform: translateY(-1px);
+        }
+
+        /* 添加点击效果 */
+        .nav-link:active {
+            transform: translateY(1px);
+        }
+
+        /* 添加霓虹发光效果 */
+        @keyframes linkGlow {
+            from {
+                text-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+            }
+        }
+
+        .nav-link:hover {
+            animation: linkGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        /* 添加下划线动画效果 */
+        @keyframes lineGlow {
+            from {
+                box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+            }
+        }
+
+        .nav-link:hover::after {
+            animation: lineGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        /* 添加交互反馈 */
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            width: 5px;
+            height: 5px;
+            background: #3498db;
+            border-radius: 50%;
+            transform: translateY(-50%) scale(0);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::before {
+            transform: translateY(-50%) scale(1);
+            opacity: 1;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        /* 登录按钮样式调整 */
+        .nav-right {
+            margin-left: auto;  /* 让登录按钮靠右 */
+        }
+
+        /* 登录按钮样式 */
+        .login-btn {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.15);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.25);
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* 导航栏滚动效果 */
+        nav.scrolled {
+            background: rgba(10, 11, 14, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 导航栏载入动画 */
+        @keyframes navFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 20px;
+        }
+
+        .prompt-section, .generating-section, .gallery-section, 
+        .pricing-section, .faq-section {
+            background: rgba(16, 18, 27, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .prompt-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 100px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            background: rgba(16, 18, 27, 0.6);
+            color: #fff;
+        }
+
+        .prompt-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+            transform: translateY(0);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        .generating-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .generating-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .generating-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .generating-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .loading-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(90deg, #1a1c28 0%, #2a2d3d 50%, #1a1c28 100%);
+            border-radius: 8px;
+            animation: darkPulse 1.5s infinite;
+        }
+
+        .gallery-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item-prompt {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(16, 18, 27, 0.9);
+            color: #fff;
+            padding: 10px;
+            font-size: 0.9em;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-item-prompt {
+            transform: translateY(0);
+        }
+
+        @keyframes darkPulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+
+        /* FAQ 样式 */
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            font-size: 1.1em;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(16, 18, 27, 0.6);
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.2em;
+            color: #3498db;
+        }
+
+        .faq-question:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .faq-answer {
+            color: #a0a0a0;
+            line-height: 1.6;
+            display: none;
+            padding: 15px;
+            margin-left: 15px;
+            border-left: 3px solid #3498db;
+        }
+
+        .faq-item.active .faq-question::after {
+            content: '-';
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* 价格模块样式 */
+        .pricing-plan {
+            border: 2px solid #eef2f7;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        }
+
+        .pricing-plan:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .pricing-plan.popular {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .pricing-plan.popular::before {
+            content: '';
+            position: absolute;
+            top: -2px; right: -2px; bottom: -2px; left: -2px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 12px;
+            z-index: -1;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 12px;
+            right: -35px;
+            background: #3498db;
+            color: white;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.8em;
+        }
+
+        .plan-name {
+            color: #fff;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .plan-price {
+            font-size: 2.5em;
+            color: #3498db;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .plan-price small {
+            font-size: 0.4em;
+            color: #95a5a6;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0a0a0;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .plan-button:hover {
+            background: #2980b9;
+        }
+
+        .plan-button.outline {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+
+        .plan-button.outline:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        /* 全局动画过渡效果 */
+        * {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* 按钮美化 */
+        .generate-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+            transform: translateY(0);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        /* 输入框美化 */
+        .prompt-input {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .prompt-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+        }
+
+        /* 卡片悬浮效果 */
+        .gallery-item, .generating-item, .pricing-plan {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover, .generating-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        /* 价格方案美化 */
+        .pricing-plan {
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        }
+
+        .pricing-plan.popular {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(16, 18, 27, 0.8));
+        }
+
+        .pricing-plan.popular::before {
+            content: '';
+            position: absolute;
+            top: -2px; right: -2px; bottom: -2px; left: -2px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 12px;
+            z-index: -1;
+        }
+
+        /* FAQ部分美化 */
+        .faq-question {
+            padding: 15px;
+            background: rgba(16, 18, 27, 0.6);
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .faq-question:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .faq-answer {
+            padding: 15px;
+            margin-left: 15px;
+            border-left: 3px solid #3498db;
+        }
+
+        /* 全局霓虹效果 */
+        .gallery-item:hover, .generating-item:hover, .pricing-plan:hover {
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.2);
+        }
+
+        /* 添加炫酷的光效 */
+        .pricing-plan::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3498db, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pricing-plan:hover::after {
+            opacity: 1;
+        }
+
+        /* 添加霓虹文字效果 */
+        .nav-logo, .section-title {
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 5px #3498db, 0 0 10px #3498db;
+            }
+            to {
+                text-shadow: 0 0 10px #3498db, 0 0 20px #3498db;
+            }
+        }
+
+        /* 提示词输入区域样式优化 */
+        .prompt-section {
+            background: rgba(16, 18, 27, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            margin-top: 100px;
+            animation: sectionFadeIn 0.8s ease-out;
+        }
+
+        /* 标题样式 */
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* 输入框容器 */
+        .input-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 输入框样式 */
+        .prompt-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 1.2rem;
+            background: rgba(16, 18, 27, 0.6);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.2),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: rgba(16, 18, 27, 0.8);
+        }
+
+        /* 提示词计数器 */
+        .prompt-counter {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.85em;
+            color: #a0a0a0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        /* 生成按钮样式 */
+        .generate-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .generate-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* 按钮光效 */
+        .generate-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0.2),
+                transparent,
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .generate-btn:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        /* 占位符样式 */
+        .prompt-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .prompt-input:focus::placeholder {
+            opacity: 0.5;
+            transform: translateX(10px);
+        }
+
+        /* 输入框聚焦时的光晕效果 */
+        @keyframes inputGlow {
+            0% {
+                box-shadow: 0 0 5px rgba(52, 152, 219, 0.2),
+                            inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(52, 152, 219, 0.3),
+                            inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        .prompt-input:focus {
+            animation: inputGlow 2s ease-in-out infinite alternate;
+        }
+
+        /* 区块载入动画 */
+        @keyframes sectionFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 提示文本样式 */
+        .prompt-tips {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid #3498db;
+            border-radius: 0 8px 8px 0;
+            color: #a0a0a0;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        /* 主容器布局 */
+        .main-content {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            margin-top: 80px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 左侧提示词输入模块 */
+        .prompt-section {
+            flex: 0 0 40%;  /* 固定宽度40% */
+            background: rgba(16, 18, 27, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 100px;  /* 与顶部导航保持距离 */
+        }
+
+        /* 右侧生成图片模块 */
+        .generation-section {
+            flex: 0 0 60%;  /* 固定宽度60% */
+            background: rgba(16, 18, 27, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 生成图片网格布局 */
+        .generated-images-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);  /* 2列布局 */
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .generated-image-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(16, 18, 27, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .generated-image-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+        }
+
+        .generated-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 加载状态样式 */
+        .loading-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(90deg, #1a1c28 0%, #2a2d3d 50%, #1a1c28 100%);
+            border-radius: 12px;
+            animation: loadingPulse 1.5s infinite;
+        }
+
+        @keyframes loadingPulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.6; }
+        }
+
+        /* 响应式布局 */
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .prompt-section,
+            .generation-section {
+                flex: 0 0 100%;
+            }
+            .prompt-section {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
 <body>
-<h1>
-    这是一个测试页面
-</h1>
-</body >
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">AI Image Generator</div>
+            <div class="nav-center">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#pricing" class="nav-link">Price</a>
+            </div>
+            <div class="nav-right">
+                <a href="#login" class="login-btn">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <!-- 主要内容区域 -->
+        <div class="main-content section-spacing fade-in">
+            <!-- 左侧提示词输入模块 -->
+            <section class="prompt-section">
+                <h2 class="section-title">Create Your Imagination</h2>
+                <div class="input-container">
+                    <textarea 
+                        class="prompt-input" 
+                        placeholder="Describe your image in detail. For example: A mystical forest at twilight with glowing fireflies, ethereal mist swirling around ancient trees, and a path illuminated by moonlight..."
+                    ></textarea>
+                    <div class="prompt-counter">0/500 characters</div>
+                </div>
+                <button class="generate-btn">Generate Image</button>
+                <div class="prompt-tips">
+                    💡 Pro Tips: 
+                    • Include details about style, lighting, and atmosphere
+                    • Specify camera angle and composition
+                    • Mention color schemes and mood
+                    • Add artistic references if needed
+                </div>
+            </section>
+
+            <!-- 右侧生成图片模块 -->
+            <section class="generation-section">
+                <h2 class="section-title">Generated Images</h2>
+                <div class="generated-images-grid">
+                    <!-- 加载状态示例 -->
+                    <div class="generated-image-item">
+                        <div class="loading-placeholder"></div>
+                    </div>
+                    <div class="generated-image-item">
+                        <div class="loading-placeholder"></div>
+                    </div>
+                    <!-- 生成图片示例 -->
+                    <div class="generated-image-item">
+                        <img src="https://picsum.photos/400/400" alt="Generated image" class="generated-image">
+                    </div>
+                    <div class="generated-image-item">
+                        <img src="https://picsum.photos/401/400" alt="Generated image" class="generated-image">
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 分隔线 -->
+        <div class="section-divider"></div>
+
+        <!-- 价格模块 -->
+        <section class="pricing-section fade-in">
+            <div class="pricing-container">
+                <div class="section-header">
+                    <h2 class="section-title">Choose Your Plan</h2>
+                    <p class="section-subtitle">Select the perfect plan for your creative needs</p>
+                </div>
+                <div class="pricing-grid">
+                    <!-- 已有的价格卡片 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 分隔线 -->
+        <div class="section-divider"></div>
+
+        <!-- FAQ模块 -->
+        <section class="faq-section fade-in">
+            <div class="section-header">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Find answers to common questions about our AI image generation service</p>
+            </div>
+            <div class="faq-grid">
+                <!-- 已有的FAQ项目 -->
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AI Image Generator</h3>
+                    <p>Transform your ideas into stunning visuals with the power of AI</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: support@aiimage.com</p>
+                    <p>Follow us on social media</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 添加页面滚动动画 -->
+    <script>
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+
+    <!-- 添加 FAQ 交互脚本 -->
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                document.querySelectorAll('.faq-item').forEach(faqItem => {
+                    if (faqItem !== item) {
+                        faqItem.classList.remove('active');
+                    }
+                });
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+
+    <!-- 添加字数统计功能的脚本 -->
+    <script>
+        const promptInput = document.querySelector('.prompt-input');
+        const promptCounter = document.querySelector('.prompt-counter');
+        const MAX_LENGTH = 500;
+
+        promptInput.addEventListener('input', function() {
+            const length = this.value.length;
+            promptCounter.textContent = `${length}/${MAX_LENGTH}`;
+            
+            if (length > MAX_LENGTH) {
+                promptCounter.style.color = '#e74c3c';
+            } else {
+                promptCounter.style.color = '#a0a0a0';
+            }
+        });
+    </script>
+</body>
 </html>
